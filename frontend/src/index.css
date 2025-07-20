@@ -1,0 +1,49 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+@import "tailwindcss";
+@theme {
+  --font-heading: "Roboto", sans-serif;
+  --font-paragraph: "Nunito Sans", sans-serif;
+  --color-primary: #efefef;
+  --color-secondary: #ffffff;
+  --color-tertiary: #ff7e0c;
+}
+
+body {
+  background-color: var(--color-primary);
+  overflow-x: hidden;
+  font-family: var(--font-paragraph);
+}
+::-webkit-scrollbar {
+  width: 2px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-tertiary);
+}
+
+@layer utilities {
+  .font-heading {
+    font-family: var(--font-heading);
+    font-weight: bold;
+  }
+  .font-paragraph {
+    font-family: var(--font-paragraph);
+  }
+}
+
+@layer components {
+  .card {
+    background-color: var(--color-white);
+    border-radius: var(--rounded-lg);
+    padding: var(--spacing-6);
+    box-shadow: var(--shadow-xl);
+  }
+}
+/*  */
+
+.title {
+  @apply font-heading text-2xl text-center mt-10 font-bold;
+}
