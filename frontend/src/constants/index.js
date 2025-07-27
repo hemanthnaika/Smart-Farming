@@ -37,7 +37,7 @@ export const Features = [
   {
     title: "Sell Product",
     image: shop,
-    path: "/sell",
+    path: "/sell-product",
   },
   {
     title: "Browse Products",

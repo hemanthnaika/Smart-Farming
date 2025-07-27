@@ -5,8 +5,11 @@ import { Category, Features } from "../constants";
 import Card from "../components/Card";
 import Banner from "../components/Banner";
 import ProductCard from "../components/ProductCard";
+import useProducts from "../hooks/useProducts";
 
 const Home = () => {
+  const { data: products, isLoading, isError } = useProducts();
+  console.log(products, isLoading, isError);
   return (
     <div>
       <Hero />
@@ -30,8 +33,10 @@ const Home = () => {
         </div>
         <h1 className="title">Latest Products from Farmers</h1>
         <div className="grid grid-cols-2  lg:grid-cols-5 md:gap-6 gap-3 mt-10 px-4">
-          {Category.map((feature) => (
-            <ProductCard key={feature.title} {...feature} />
+          {isLoading && <p>Loading products...</p>}
+          {isError && <p>Failed to fetch products</p>}
+          {products?.products?.map((product) => (
+            <ProductCard key={product._id} product={product} />
           ))}
         </div>
       </Layout>

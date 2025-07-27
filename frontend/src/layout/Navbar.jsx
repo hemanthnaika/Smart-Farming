@@ -3,11 +3,18 @@ import { Menu, X } from "lucide-react";
 import { NavbarLinks } from "./../constants/index";
 import { logo } from "../assets/images";
 import { Link } from "react-router";
+import AuthModal from "../components/AuthModal";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/slices/authSlice";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
+  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +24,11 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    setShowDropdown(false);
+  };
 
   return (
     <nav>
@@ -50,17 +62,93 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Auth Buttons */}
-        <div className="hidden md:flex gap-3">
-          <Link
-            className="font-heading border px-5 py-1 rounded-md hover:bg-tertiary ease-in duration-300 hover:text-secondary"
-            to="/login"
-          >
-            Sign In
-          </Link>
-        </div>
+        {isAuthenticated ? (
+          <div className="hidden md:inline-block relative">
+            <img
+              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200" // or user.profilePhoto if you have it
+              alt="Profile"
+              onClick={() => setShowDropdown((prev) => !prev)}
+              className="w-8 h-8 rounded-full cursor-pointer"
+            />
+            {showDropdown && (
+              <div className="absolute right-0 mt-2 w-32 bg-white shadow-md rounded-md py-2 z-50">
+                <Link
+                  to="/profile"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => setShowDropdown(false)}
+                >
+                  Profile
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="hidden md:flex gap-3">
+            <button
+              onClick={() => setShowAuthModal(true)}
+              className="font-heading border px-5 py-1 rounded-md hover:bg-tertiary ease-in duration-300 hover:text-secondary cursor-pointer"
+            >
+              Sign In
+            </button>
+
+            <AuthModal
+              isOpen={showAuthModal}
+              onClose={() => setShowAuthModal(false)}
+            />
+          </div>
+        )}
+
+        {/* Auth Modal */}
 
         {/* Mobile Menu Button */}
-        <div className="md:hidden ">
+        <div className="md:hidden flex items-center justify-between gap-5">
+          {isAuthenticated ? (
+            <div className="relative">
+              <img
+                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200" // or user.profilePhoto if you have it
+                alt="Profile"
+                onClick={() => setShowDropdown((prev) => !prev)}
+                className="w-8 h-8 rounded-full cursor-pointer"
+              />
+              {showDropdown && (
+                <div className="absolute right-0 mt-2 w-32 bg-white shadow-md rounded-md py-2 z-50">
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowAuthModal(true)}
+                className="font-heading border px-5 py-1 rounded-md hover:bg-tertiary ease-in duration-300 hover:text-secondary cursor-pointer"
+              >
+                Sign In
+              </button>
+
+              <AuthModal
+                isOpen={showAuthModal}
+                onClose={() => setShowAuthModal(false)}
+              />
+            </div>
+          )}
           <button onClick={() => setIsOpen(!isOpen)} className="cursor-pointer">
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -82,12 +170,6 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
-          <Link
-            className="font-heading border px-5 py-1 rounded-md hover:bg-tertiary ease-in duration-300 hover:text-secondary"
-            to="/login"
-          >
-            Sign In
-          </Link>
         </div>
       )}
     </nav>

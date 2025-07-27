@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { addProduct } from "../api/productApi";
 import Layout from "../components/Layout";
+import { useSelector } from "react-redux";
 
 const SellProduct = () => {
+  const { token } = useSelector((auth) => auth.auth);
+
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -10,6 +15,25 @@ const SellProduct = () => {
     contact: "",
     description: "",
     image: null,
+  });
+
+  const mutation = useMutation({
+    mutationFn: addProduct,
+    onSuccess: (data) => {
+      alert("Product added successfully!");
+      setFormData({
+        name: "",
+        price: "",
+        quantity: "",
+        location: "",
+        contact: "",
+        description: "",
+        image: null,
+      });
+    },
+    onError: (error) => {
+      alert(error?.response?.data?.error || "Failed to add product.");
+    },
   });
 
   const handleChange = (e) => {
@@ -30,8 +54,7 @@ const SellProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Submit form data to backend
-    console.log("Submitted:", formData);
+    mutation.mutate({ formData, token });
   };
 
   return (
@@ -115,8 +138,9 @@ const SellProduct = () => {
           <button
             type="submit"
             className="w-full bg-tertiary text-white py-2 rounded"
+            disabled={mutation.isLoading}
           >
-            Submit Product
+            {mutation.isLoading ? "Submitting..." : "Submit Product"}
           </button>
         </form>
       </div>
