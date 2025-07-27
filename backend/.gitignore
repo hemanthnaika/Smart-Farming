@@ -1,0 +1,49 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+*.env
+
+# Flask/MongoDB related
+instance/
+*.db
+*.sqlite3
+
+# Environment and secret config
+*.env
+.env.*
+config.ini
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+.DS_Store
+
+# Jupyter/IPython
+.ipynb_checkpoints
+
+# Model files
+*.h5
+*.pkl
+*.joblib
+
+# VS Code settings
+.vscode/
+
+# System files
+Thumbs.db
+Desktop.ini
+
+# Node modules (if full stack)
+node_modules/
+build/
+dist/
