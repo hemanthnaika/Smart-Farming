@@ -6,9 +6,9 @@ import Products from "./pages/Products";
 import Product from "./pages/Product";
 import SellProduct from "./pages/SellProduct";
 import DiseaseDetection from "./pages/DiseaseDetection";
-import FertilizerRecommendation from "./pages/FertilizerRecommendation";
 import MarketPrices from "./pages/MarketPrices";
 import UserDashboard from "./pages/UserDashboard";
+import FertilizerPredict from "./pages/FertilizerPredict";
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -36,7 +36,7 @@ const App = () => {
         },
         {
           path: "/fertilizer-guide",
-          element: <FertilizerRecommendation />,
+          element: <FertilizerPredict />,
         },
         {
           path: "/market-prices",

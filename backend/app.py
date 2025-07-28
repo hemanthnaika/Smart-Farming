@@ -7,15 +7,21 @@ from flask_bcrypt import Bcrypt
 from middlewares.error_handlers import register_error_handlers
 from flask_cors import CORS
 from routes.product_routes import product_routes
+from dotenv import load_dotenv
+from routes.fertilizer_routes import fertilizer_routes
+import os
+
+
+load_dotenv() 
 
 app = Flask(__name__)
 CORS(app)
 
 
-app.config['SECRET_KEY'] = 'your_secret_key_here'
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 app.config['MONGODB_SETTINGS'] = {
     'db': 'smartfarmdb',
-    'host': 'mongodb+srv://localhost/test',
+    'host': os.getenv("MONGO_URI"),
 
 }
 
@@ -28,9 +34,7 @@ Bcrypt(app)
 # Register routes
 app.register_blueprint(auth_bp)
 app.register_blueprint(product_routes)
-
-
-
+app.register_blueprint(fertilizer_routes)
 
 
 

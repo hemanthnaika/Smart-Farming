@@ -79,11 +79,7 @@ def get_all_products():
         return jsonify({"error": str(e)}), 500
 
 
-def update_product(user_id):
-    try:
-        user=User.objects(id=user_id).first()
-        if not user:
-            return jsonify({"error": "User not found"}), 404
+
         
         
         

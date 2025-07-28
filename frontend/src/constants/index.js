@@ -47,17 +47,12 @@ export const Features = [
   {
     title: "Detect Diseases",
     image: Diseases,
-    path: "/sell",
+    path: "/detect-disease",
   },
   {
     title: "Fertilizer Guide",
     image: Fertilizer,
-    path: "/sell",
-  },
-  {
-    title: "Market Prices",
-    image: Market,
-    path: "/sell",
+    path: "/fertilizer-guide",
   },
 ];
 

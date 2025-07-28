@@ -24,8 +24,8 @@ const Hero = () => {
           <span className="text-accent">Smart Technology</span>
         </h1>
         <p className="mt-4 text-lg md:text-md font-paragraph text-center max-w-xl ">
-          Sell your crops, detect plant diseases, get fertilizer advice, and
-          stay updated with market prices — all in one place.
+          Sell your crops, detect plant diseases, and get fertilizer advice —
+          all in one place.
         </p>
         <Link
           to="/register"
