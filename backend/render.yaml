@@ -1,8 +1,13 @@
 services:
   - type: web
-    name: smart-farming-api
+    name: flask-backend
     env: python
-    buildCommand: "pip install --upgrade pip && pip install --only-binary=:all: -r requirements.txt"
-    startCommand: "gunicorn app:app"
-    region: oregon
     plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    autoDeploy: true
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PORT
+        value: 10000
