@@ -21,7 +21,7 @@ export const NavbarLinks = [
   },
   {
     name: "About Us",
-    path: "/about",
+    path: "/about-us",
   },
   {
     name: "Contact Us",
@@ -42,7 +42,7 @@ export const Features = [
   {
     title: "Browse Products",
     image: Browse,
-    path: "/sell",
+    path: "/products",
   },
   {
     title: "Detect Diseases",
@@ -60,41 +60,37 @@ export const Category = [
   {
     title: "Grains",
     image: Grains,
-    path: "/sell",
+    path: "/products?category=Grains",
   },
   {
     title: "Vegetables",
     image: Vegetables,
-    path: "/sell",
+    path: "/products?category=Vegetables",
   },
   {
     title: "Fruits",
     image: Fruits,
-    path: "/sell",
+    path: "/products?category=Fruits",
   },
   {
     title: "Herbs & Spices",
     image: Spices,
-    path: "/sell",
+    path: "/products?category=Herbs & Spices",
   },
   {
     title: "Pulses & Beans",
     image: Beans,
-    path: "/sell",
+    path: "/products?category=Pulses & Beans",
   },
   {
     title: "Dairy Products",
     image: Dairy,
-    path: "/sell",
+    path: "/products?category=Dairy Products",
   },
-  {
-    title: "Livestock             ",
-    image: Livestock,
-    path: "/sell",
-  },
+
   {
     title: "Others",
     image: Others,
-    path: "/sell",
+    path: "/products?category=Others",
   },
 ];

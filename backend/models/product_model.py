@@ -10,7 +10,8 @@ class Product(Document):
     location = StringField(required=True, max_length=100)
     contact = StringField(required=True, max_length=20)
     description = StringField(max_length=1000)
-    image = StringField()  # URL or filename
+    category = StringField(required=True, max_length=50) 
+    image = StringField()  
     created_at = StringField(default=str(datetime.utcnow()))
 
     meta = {

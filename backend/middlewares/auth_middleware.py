@@ -3,7 +3,7 @@ from flask import request, jsonify
 import jwt
 import os
 
-SECRET_KEY = "your_secret_key_here"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 def token_required(f):
     @wraps(f)
@@ -12,7 +12,7 @@ def token_required(f):
        
         if "Authorization" in request.headers:
             auth_header = request.headers["Authorization"]
-            print(auth_header)
+            
             if auth_header.startswith("Bearer"):
                 token = auth_header.split(" ")[1]
 

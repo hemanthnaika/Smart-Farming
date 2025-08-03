@@ -19,7 +19,6 @@ export default function AuthModal({ isOpen, onClose }) {
         },
       }),
     onSuccess: (data) => {
-      console.log(data);
       dispatch(
         loginSuccess({
           token: data.data.token,
@@ -41,12 +40,18 @@ export default function AuthModal({ isOpen, onClose }) {
           "Content-Type": "multipart/form-data",
         },
       }),
-    onSuccess: () => {
-      alert("Registration successful");
+    onSuccess: (data) => {
+      dispatch(
+        loginSuccess({
+          token: data.data.token,
+          user: data.data.user,
+        })
+      );
+      toast.success(data.data.message);
       onClose();
     },
     onError: (err) => {
-      alert("Register failed: " + (err.response?.data?.message || err.message));
+      toast.error(err.response?.data?.message || err.message);
     },
   });
 

@@ -1,12 +1,29 @@
-import React, { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { addProduct } from "../api/productApi";
+import React, { useEffect, useRef, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { addProduct, getSingleProduct, updateProduct } from "../api/productApi";
 import Layout from "../components/Layout";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { LoginImage } from "../assets/images";
+import { useNavigate, useParams, useLocation } from "react-router";
+
+const categories = [
+  "Grains",
+  "Vegetables",
+  "Fruits",
+  "Herbs & Spices",
+  "Pulses & Beans",
+  "Dairy Products",
+  "Livestock",
+  "Others",
+];
 
 const SellProduct = () => {
   const { token } = useSelector((auth) => auth.auth);
-
+  const { id } = useParams();
+  const location = useLocation();
+  const fileInputRef = useRef(null);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -15,12 +32,12 @@ const SellProduct = () => {
     contact: "",
     description: "",
     image: null,
+    category: "",
   });
+  const [imagePreview, setImagePreview] = useState(null);
 
-  const mutation = useMutation({
-    mutationFn: addProduct,
-    onSuccess: (data) => {
-      alert("Product added successfully!");
+  useEffect(() => {
+    if (!id) {
       setFormData({
         name: "",
         price: "",
@@ -28,11 +45,55 @@ const SellProduct = () => {
         location: "",
         contact: "",
         description: "",
+        category: "",
         image: null,
       });
+      setImagePreview(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  }, [location.pathname, id]);
+
+  const { data: productData, isSuccess } = useQuery({
+    queryKey: ["product", id],
+    queryFn: () => getSingleProduct(id),
+    enabled: !!id,
+  });
+
+  useEffect(() => {
+    if (id && isSuccess && productData) {
+      const product = productData;
+      console.log("Editing product:", product);
+      setFormData({
+        name: product.name || "",
+        price: product.price || "",
+        quantity: product.quantity || "",
+        location: product.location || "",
+        contact: product.contact || "",
+        description: product.description || "",
+        category: product.category || "",
+        image: null, // reset file input
+      });
+
+      if (product.image) {
+        setImagePreview(`${import.meta.env.VITE_BASE_URL}/${product.image}`);
+      }
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  }, [id, isSuccess, productData]);
+
+  const mutation = useMutation({
+    mutationFn: id ? updateProduct : addProduct,
+    onSuccess: () => {
+      toast.success(id ? "Product updated!" : "Product added!");
+      navigate(-1);
     },
     onError: (error) => {
-      alert(error?.response?.data?.error || "Failed to add product.");
+      toast.error(error?.response?.data?.error || "Operation failed");
     },
   });
 
@@ -44,24 +105,53 @@ const SellProduct = () => {
     }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setFormData((prev) => ({
-      ...prev,
-      image: file,
-    }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutation.mutate({ formData, token });
+    const payload = id ? { id, formData, token } : { formData, token };
+    mutation.mutate(payload);
   };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setFormData({ ...formData, image: file });
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result); // set preview URL
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreview(null);
+    }
+  };
+
+  if (!token) {
+    toast.error("You must be logged in to sell a product");
+    return (
+      <Layout>
+        <div className="min-h-[50dvh] flex flex-col items-center justify-center p-6 pt-15">
+          <img
+            src={LoginImage}
+            alt="Login required"
+            className="w-full h-64 object-contain mb-6"
+          />
+          <h2 className="text-2xl font-semibold text-gray-700 mb-2">
+            Please login to continue
+          </h2>
+          <p className="text-gray-500">
+            You must be logged in to sell a product.
+          </p>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
       <div className="max-w-4xl mx-auto py-20 px-4">
         <h2 className="text-3xl font-heading mb-8 text-center">
-          Sell Your Product
+          {id ? "Update Product" : "Sell Your Product"}
         </h2>
         <form
           onSubmit={handleSubmit}
@@ -118,6 +208,21 @@ const SellProduct = () => {
             className="w-full border px-4 py-2 rounded"
           />
 
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            required
+            className="w-full border px-4 py-2 rounded"
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat, idx) => (
+              <option key={idx} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+
           <textarea
             name="description"
             placeholder="Product Description"
@@ -127,8 +232,17 @@ const SellProduct = () => {
             rows={4}
             className="w-full border px-4 py-2 rounded"
           />
-
+          {imagePreview && (
+            <div className="mb-4">
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="w-40 h-40 object-cover border rounded"
+              />
+            </div>
+          )}
           <input
+            ref={fileInputRef}
             type="file"
             accept="image/*"
             onChange={handleImageChange}
@@ -140,7 +254,13 @@ const SellProduct = () => {
             className="w-full bg-tertiary text-white py-2 rounded"
             disabled={mutation.isLoading}
           >
-            {mutation.isLoading ? "Submitting..." : "Submit Product"}
+            {mutation.isLoading
+              ? id
+                ? "Updating..."
+                : "Submitting..."
+              : id
+              ? "Update Product"
+              : "Submit Product"}
           </button>
         </form>
       </div>

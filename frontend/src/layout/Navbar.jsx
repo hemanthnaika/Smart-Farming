@@ -73,7 +73,7 @@ export default function Navbar() {
             {showDropdown && (
               <div className="absolute right-0 mt-2 w-32 bg-white shadow-md rounded-md py-2 z-50">
                 <Link
-                  to="/profile"
+                  to="/user-dashboard"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   onClick={() => setShowDropdown(false)}
                 >
@@ -119,7 +119,7 @@ export default function Navbar() {
               {showDropdown && (
                 <div className="absolute right-0 mt-2 w-32 bg-white shadow-md rounded-md py-2 z-50">
                   <Link
-                    to="/profile"
+                    to="/user-dashboard"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     onClick={() => setShowDropdown(false)}
                   >

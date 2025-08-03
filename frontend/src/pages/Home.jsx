@@ -11,7 +11,7 @@ const Home = () => {
   const { data: products, isLoading, isError } = useProducts();
   console.log(products, isLoading, isError);
   return (
-    <div>
+    <div className="mb-10">
       <Hero />
       <Layout>
         <h1 className="title">What Would You Like to Do Today, Farmer?</h1>
@@ -40,8 +40,6 @@ const Home = () => {
           ))}
         </div>
       </Layout>
-
-      <div className="mb-10">l</div>
     </div>
   );
 };

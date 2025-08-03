@@ -15,14 +15,11 @@ import os
 load_dotenv() 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
 
-
-app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 app.config['MONGODB_SETTINGS'] = {
     'db': 'smartfarmdb',
     'host': os.getenv("MONGO_URI"),
-
 }
 
 db.init_app(app)

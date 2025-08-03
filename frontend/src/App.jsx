@@ -7,8 +7,9 @@ import Product from "./pages/Product";
 import SellProduct from "./pages/SellProduct";
 import DiseaseDetection from "./pages/DiseaseDetection";
 import MarketPrices from "./pages/MarketPrices";
-import UserDashboard from "./pages/UserDashboard";
+import About from "./pages/About";
 import FertilizerPredict from "./pages/FertilizerPredict";
+import UserProfile from "./pages/UserProfile";
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -23,7 +24,7 @@ const App = () => {
           element: <Products />,
         },
         {
-          path: "/products/:productId",
+          path: "/products/:id",
           element: <Product />,
         },
         {
@@ -44,7 +45,19 @@ const App = () => {
         },
         {
           path: "/user-dashboard",
-          element: <UserDashboard />,
+          element: <UserProfile />,
+        },
+        {
+          path: "/update-product/:id",
+          element: <SellProduct />,
+        },
+        {
+          path: "/category/:categoryName",
+          element: <Products />,
+        },
+        {
+          path: "/about-us",
+          element: <About />,
         },
       ],
     },
