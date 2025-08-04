@@ -8,13 +8,16 @@ import os
 
 # Get the current directory of the file
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "model", "plant_disease_prediction_model.h5")
+MODEL_PATH = os.path.join(BASE_DIR, "..", "model", "plant_disease_prediction_model.h5")
 
 # Load class indices
-with open(os.path.join(BASE_DIR, "model", "class_indices.json")) as f:
+# Load class indices and convert keys to int
+with open(os.path.join(BASE_DIR, "..", "model", "class_indices.json")) as f:
     class_indices = json.load(f)
+    class_indices = {int(k): v for k, v in class_indices.items()}
 
 model = tf.keras.models.load_model(MODEL_PATH)
+
 
 
 
@@ -27,16 +30,15 @@ def load_and_preprocess_image(image_path, target_size=(224, 224)):
     return img_array
 
 
-
-
 def detect_disease():
+    print("Class Indices:", class_indices)
     if 'image' not in request.files:
         return jsonify({'error': 'No image uploaded'}), 400
 
     image = request.files['image']
-    save_path = os.path.join("uploads", image.filename)
     upload_folder = "static/uploads/crops"
     os.makedirs(upload_folder, exist_ok=True)
+    save_path = os.path.join(upload_folder, image.filename)
     image.save(save_path)
 
     try:
@@ -48,4 +50,4 @@ def detect_disease():
         return jsonify({'result': predicted_class})
     except Exception as e:
         print(e)
-        return jsonify({'error': 'Prediction failed'}), 500
+        return jsonify({'error': 'Prediction failed', 'message': str(e)}), 500

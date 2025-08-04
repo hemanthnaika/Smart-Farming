@@ -9,6 +9,7 @@ from flask_cors import CORS
 from routes.product_routes import product_routes
 from dotenv import load_dotenv
 from routes.fertilizer_routes import fertilizer_routes
+from routes.crop_routes import crop_routes
 import os
 
 
@@ -32,6 +33,8 @@ Bcrypt(app)
 app.register_blueprint(auth_bp)
 app.register_blueprint(product_routes)
 app.register_blueprint(fertilizer_routes)
+app.register_blueprint(crop_routes)
+
 
 
 

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import Layout from "../components/Layout";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 const DiseaseDetection = () => {
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [history, setHistory] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -17,51 +18,57 @@ const DiseaseDetection = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const mutation = useMutation({
+    mutationFn: async (imageFile) => {
+      const formData = new FormData();
+      formData.append("image", imageFile);
 
-    if (!image) return alert("Please upload a plant image.");
-    setLoading(true);
-
-    const formData = new FormData();
-    formData.append("image", image);
-
-    try {
-      // Replace with your actual backend endpoint
-      const res = await fetch("/api/detect-disease", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-      setResult(data.result);
-
-      // Add to history
-      setHistory((prev) => [
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/predict-crop-disease`,
+        formData,
         {
-          id: Date.now(),
-          image: previewUrl,
-          result: data.result,
-        },
-        ...prev,
-      ]);
-    } catch (err) {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return data;
+    },
+    onSuccess: (data) => {
+      const formattedResult = data.result
+        .replace(/___/g, " - ")
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+
+      setResult(formattedResult);
+      setSearchTerm(formattedResult);
+    },
+    onError: (err) => {
       console.error(err);
       alert("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!image) return alert("Please upload a plant image.");
+    mutation.mutate(image);
   };
+
+  // Extract disease part from result to hide link if Healthy
+  const diseaseOnly = searchTerm?.includes(" - ")
+    ? searchTerm.split(" - ")[1]?.trim()
+    : searchTerm;
 
   return (
     <Layout>
       <div className="max-w-4xl mx-auto py-20 px-4">
         <h2 className="text-3xl font-bold text-green-700 text-center mb-6">
-          Plant Disease Detection
+          Crop Disease Detection
         </h2>
 
         <p className="text-gray-600 text-center mb-8">
-          Upload a photo of your plant leaf to detect potential diseases using
+          Upload a photo of your crop leaf to detect potential diseases using
           AI.
         </p>
 
@@ -89,10 +96,10 @@ const DiseaseDetection = () => {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={mutation.isPending}
             className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
           >
-            {loading ? "Analyzing..." : "Detect Disease"}
+            {mutation.isPending ? "Analyzing..." : "Detect Disease"}
           </button>
         </form>
 
@@ -105,25 +112,17 @@ const DiseaseDetection = () => {
           </div>
         )}
 
-        {history.length > 0 && (
-          <div className="mt-12">
-            <h3 className="text-xl font-bold">Detection History</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {history.map((item) => (
-                <div
-                  key={item.id}
-                  className="border rounded p-4 flex gap-4 items-center"
-                >
-                  <img
-                    src={item.image}
-                    alt="History"
-                    className="w-20 h-20 object-cover rounded"
-                  />
-                  <p className="text-gray-700">{item.result}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+        {diseaseOnly && diseaseOnly.toLowerCase() !== "healthy" && (
+          <a
+            href={`https://www.google.com/search?q=${encodeURIComponent(
+              searchTerm + " treatment"
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-4 text-blue-600 underline"
+          >
+            View More Treatments on Google
+          </a>
         )}
       </div>
     </Layout>
