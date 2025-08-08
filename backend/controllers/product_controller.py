@@ -21,11 +21,13 @@ def add_product(user_id):
         description = request.form.get("description", "")
         image_file = request.files.get("image")
         category=request.form.get("category")
+        unit=request.form.get("unit")
+
         if not category:
             return jsonify({"error": "Category is required"}), 400
 
         # Validate required fields
-        if not all([name, price, quantity, location, contact,category]):
+        if not all([name, price, quantity, location, contact,category,unit]):
             return jsonify({"error": "All required fields must be filled."}), 400
 
         # Handle image file saving
@@ -48,7 +50,8 @@ def add_product(user_id):
             contact=contact,
             description=description,
             image=image_path,
-            category=category
+            category=category,
+            unit=unit,
         )
         product.save()
         return jsonify({"message": "Product added successfully", "product_id": str(product.id)}), 201
@@ -74,6 +77,7 @@ def get_all_products():
                 "description": product.description,
                 "image": product.image,
                 "category": product.category,
+                "unit": product.unit,
                 "user": {
                     "id": str(product.user.id),
                     "name": product.user.name,
@@ -100,6 +104,7 @@ def get_product(id):
             "description": product.description,
             "image": product.image,
             "category":product.category,
+            "unit": product.unit,
             "user": {
                 "id": str(product.user.id),
                 "name": product.user.name,
@@ -135,7 +140,8 @@ def get_all_my_products(user_id):
                 "contact": product.contact,
                 "description": product.description,
                 "image": product.image,
-                "category":product.category
+                "category":product.category,
+                "unit": product.unit,
             })
 
         return jsonify({"products": product_list}), 200
@@ -166,6 +172,7 @@ def update_product(product_id, user_id):
         description = request.form.get("description", "")
         category = request.form.get("category")
         image_file = request.files.get("image")
+        unit=request.form.get("unit")
 
         # Update fields after converting to correct types
         if name: product.name = name
@@ -185,6 +192,7 @@ def update_product(product_id, user_id):
         if contact: product.contact = contact
         if description: product.description = description
         if category: product.category = category
+        if unit: product.unit = unit
 
         # Handle optional image upload
         if image_file and image_file.filename != "":
@@ -247,6 +255,8 @@ def get_products_by_category():
                 "description": product.description,
                 "image": product.image,
                 "category": product.category,
+                "unit": product.unit,
+
                 "user": {
                     "id": str(product.user.id),
                     "name": product.user.name,

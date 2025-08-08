@@ -13,6 +13,7 @@ class Product(Document):
     category = StringField(required=True, max_length=50) 
     image = StringField()  
     created_at = StringField(default=str(datetime.utcnow()))
+    unit=StringField(required=True,max_length=50)
 
     meta = {
         'collection': 'products',

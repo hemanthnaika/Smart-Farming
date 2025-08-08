@@ -10,18 +10,19 @@ export default function ProductCard({ product }) {
   return (
     <div className="flex flex-col bg-white shadow-md w-full max-w-xs font-[Poppins] rounded overflow-hidden hover:shadow-2xl hover:-translate-y-0.5 cursor-pointer">
       <img
-        className="w-full h-48 object-contain"
+        className="w-full h-48 object-cover"
         src={imageUrl}
         alt={product.name || "Product"}
       />
       <div className="p-4 text-sm font-semibold">
         <div className="flex justify-between flex-col md:flex-row">
           <p className="text-slate-600 text-md md:text-lg line-through">
-            ₹ {product.price + 10} / kg
+            ₹ {product.price + 10} / {product.unit}
           </p>
           <p className="text-slate-600 text-lg md:text-xl">
-            ₹ {product.price} / kg
+            ₹ {product.price} / {product.unit}
           </p>
+        
         </div>
         <p className="text-slate-800 text-base font-medium my-1.5">
           {product.name}

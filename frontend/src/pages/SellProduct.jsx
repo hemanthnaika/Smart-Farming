@@ -1,3 +1,5 @@
+// SellProduct.jsx
+
 import React, { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { addProduct, getSingleProduct, updateProduct } from "../api/productApi";
@@ -14,9 +16,18 @@ const categories = [
   "Herbs & Spices",
   "Pulses & Beans",
   "Dairy Products",
-  "Livestock",
   "Others",
 ];
+
+const categoryUnits = {
+  Grains: "kg",
+  Vegetables: "kg",
+  Fruits: "kg",
+  "Herbs & Spices": "bundles",
+  "Pulses & Beans": "kg",
+  "Dairy Products": "liters",
+  Others: "units",
+};
 
 const SellProduct = () => {
   const { token } = useSelector((auth) => auth.auth);
@@ -24,6 +35,7 @@ const SellProduct = () => {
   const location = useLocation();
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -33,7 +45,9 @@ const SellProduct = () => {
     description: "",
     image: null,
     category: "",
+    customCategory: "",
   });
+
   const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
@@ -46,6 +60,7 @@ const SellProduct = () => {
         contact: "",
         description: "",
         category: "",
+        customCategory: "",
         image: null,
       });
       setImagePreview(null);
@@ -64,7 +79,6 @@ const SellProduct = () => {
   useEffect(() => {
     if (id && isSuccess && productData) {
       const product = productData;
-      console.log("Editing product:", product);
       setFormData({
         name: product.name || "",
         price: product.price || "",
@@ -73,7 +87,8 @@ const SellProduct = () => {
         contact: product.contact || "",
         description: product.description || "",
         category: product.category || "",
-        image: null, // reset file input
+
+        image: null,
       });
 
       if (product.image) {
@@ -107,7 +122,13 @@ const SellProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const payload = id ? { id, formData, token } : { formData, token };
+    const selectedUnit = categoryUnits[formData.category] || "units";
+
+    const finalData = { ...formData, unit: selectedUnit };
+
+    const payload = id
+      ? { id, formData: finalData, token }
+      : { formData: finalData, token };
     mutation.mutate(payload);
   };
 
@@ -118,7 +139,7 @@ const SellProduct = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result); // set preview URL
+        setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
     } else {
@@ -126,15 +147,20 @@ const SellProduct = () => {
     }
   };
 
+  useEffect(() => {
+    if (!token) {
+      toast.error("You must be logged in to sell a product");
+    }
+  }, [token]);
+
   if (!token) {
-    toast.error("You must be logged in to sell a product");
     return (
       <Layout>
-        <div className="min-h-[50dvh] flex flex-col items-center justify-center p-6 pt-15">
+        <div className="min-h-[80dvh] flex flex-col items-center justify-center p-6 pt-15">
           <img
             src={LoginImage}
             alt="Login required"
-            className="w-full h-64 object-contain mb-6"
+            className="w-full h-80 object-contain mb-6"
           />
           <h2 className="text-2xl font-semibold text-gray-700 mb-2">
             Please login to continue
@@ -146,6 +172,8 @@ const SellProduct = () => {
       </Layout>
     );
   }
+
+  const selectedUnit = categoryUnits[formData.category] || "units";
 
   return (
     <Layout>
@@ -166,12 +194,26 @@ const SellProduct = () => {
             required
             className="w-full border px-4 py-2 rounded"
           />
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            required
+            className="w-full border px-4 py-2 rounded"
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat, idx) => (
+              <option key={idx} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
 
           <div className="flex flex-col sm:flex-row gap-4">
             <input
               type="number"
               name="price"
-              placeholder="Price (per kg)"
+              placeholder={`Price per ${selectedUnit}`}
               value={formData.price}
               onChange={handleChange}
               required
@@ -180,7 +222,7 @@ const SellProduct = () => {
             <input
               type="number"
               name="quantity"
-              placeholder="Quantity (kg)"
+              placeholder={`Total Stock `}
               value={formData.quantity}
               onChange={handleChange}
               required
@@ -208,21 +250,6 @@ const SellProduct = () => {
             className="w-full border px-4 py-2 rounded"
           />
 
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-            className="w-full border px-4 py-2 rounded"
-          >
-            <option value="">Select Category</option>
-            {categories.map((cat, idx) => (
-              <option key={idx} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-
           <textarea
             name="description"
             placeholder="Product Description"
@@ -232,6 +259,7 @@ const SellProduct = () => {
             rows={4}
             className="w-full border px-4 py-2 rounded"
           />
+
           {imagePreview && (
             <div className="mb-4">
               <img

@@ -5,6 +5,7 @@ import { ProductHero } from "../assets/images";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSearchParams } from "react-router";
+import CardSkeleton from "./../components/CardSkeleton";
 
 const fetchProducts = async ({ queryKey }) => {
   const [_key, category] = queryKey;
@@ -117,7 +118,10 @@ const Products = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-6 px-4">
-          {isLoading && <p>Loading products...</p>}
+          {isLoading &&
+            Array.from({ length: 5 }).map((_, i) => (
+              <CardSkeleton product={i} />
+            ))}
           {isError && <p>Error loading products.</p>}
           {!isLoading && filteredProducts.length === 0 && (
             <p className="col-span-full text-center text-gray-600">

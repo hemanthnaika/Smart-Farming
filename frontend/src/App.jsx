@@ -10,6 +10,12 @@ import MarketPrices from "./pages/MarketPrices";
 import About from "./pages/About";
 import FertilizerPredict from "./pages/FertilizerPredict";
 import UserProfile from "./pages/UserProfile";
+import gsap from "gsap";
+import { ScrollTrigger, SplitText } from "gsap/all";
+import ContactForm from "./pages/Contact";
+
+gsap.registerPlugin(ScrollTrigger, SplitText);
+
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -58,6 +64,10 @@ const App = () => {
         {
           path: "/about-us",
           element: <About />,
+        },
+        {
+          path: "/contact",
+          element: <ContactForm />,
         },
       ],
     },

@@ -18,9 +18,6 @@ with open(os.path.join(BASE_DIR, "..", "model", "class_indices.json")) as f:
 
 model = tf.keras.models.load_model(MODEL_PATH)
 
-
-
-
 def load_and_preprocess_image(image_path, target_size=(224, 224)):
     img = Image.open(image_path)
     img = img.resize(target_size)
@@ -28,7 +25,6 @@ def load_and_preprocess_image(image_path, target_size=(224, 224)):
     img_array = np.expand_dims(img_array, axis=0)
     img_array = img_array.astype('float32') / 255.0
     return img_array
-
 
 def detect_disease():
     print("Class Indices:", class_indices)
