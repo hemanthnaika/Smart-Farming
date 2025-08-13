@@ -1,10 +1,9 @@
-from flask import  request, jsonify
+from flask import request, jsonify
 import os
 import json
 from PIL import Image
 import numpy as np
-import tensorflow as tf 
-import os
+import tensorflow as tf
 
 # Get the current directory of the file
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -40,10 +39,17 @@ def detect_disease():
     try:
         img_array = load_and_preprocess_image(save_path)
         prediction = model.predict(img_array)
+        
         predicted_index = np.argmax(prediction, axis=1)[0]
         predicted_class = class_indices.get(predicted_index, "Unknown")
 
-        return jsonify({'result': predicted_class})
+       
+        confidence = float(np.max(prediction) * 100)
+
+        return jsonify({
+            'result': predicted_class,
+            'accuracy': round(confidence, 2)  
+        })
     except Exception as e:
         print(e)
         return jsonify({'error': 'Prediction failed', 'message': str(e)}), 500

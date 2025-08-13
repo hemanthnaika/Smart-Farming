@@ -8,7 +8,7 @@ const DiseaseDetection = () => {
   const [previewUrl, setPreviewUrl] = useState("");
   const [result, setResult] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [accuracy, setAccuracy] = useState("");
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -42,6 +42,7 @@ const DiseaseDetection = () => {
 
       setResult(formattedResult);
       setSearchTerm(formattedResult);
+      setAccuracy(data.accuracy);
     },
     onError: (err) => {
       console.error(err);
@@ -109,6 +110,7 @@ const DiseaseDetection = () => {
               Detection Result:
             </h4>
             <p className="text-gray-700">{result}</p>
+            <p className="text-gray-700">Accuracy: {accuracy} %</p>
           </div>
         )}
 

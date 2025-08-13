@@ -1,3 +1,4 @@
+// Fertilizer.jsx
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -21,23 +22,32 @@ const cropTypes = [
 
 const Fertilizer = () => {
   const [formData, setFormData] = useState({
+    nitrogen: "",
+    potassium: "",
+    phosphorous: "",
     soil: "0",
     crop: "0",
-    temperature: "",
-    humidity: "",
-    moisture: "",
   });
 
   const { mutate, data, isPending, error } = useMutation({
     mutationFn: async () => {
-      const fd = new FormData();
-      Object.entries(formData).forEach(([key, val]) => fd.append(key, val));
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/predict-fertilizer`,
-        fd
+        {
+          nitrogen: formData.nitrogen,
+          potassium: formData.potassium,
+          phosphorous: formData.phosphorous,
+          soil: formData.soil,
+          crop: formData.crop,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
       );
-
       return res.data;
+    },
+    onError: () => {
+      toast.error("Failed to get fertilizer prediction");
     },
   });
 
@@ -57,6 +67,7 @@ const Fertilizer = () => {
             <label className="block font-medium mb-1">Select Soil Type</label>
             <select
               name="soil"
+              value={formData.soil}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
             >
@@ -72,6 +83,7 @@ const Fertilizer = () => {
             <label className="block font-medium mb-1">Select Crop Type</label>
             <select
               name="crop"
+              value={formData.crop}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
             >
@@ -84,38 +96,36 @@ const Fertilizer = () => {
           </div>
 
           <div>
-            <label className="block font-medium mb-1">
-              🌡️ Temperature (°C)
-            </label>
+            <label className="block font-medium mb-1">🧪 Nitrogen</label>
             <input
               type="number"
-              step="0.1"
-              name="temperature"
-              placeholder="Enter temperature"
+              name="nitrogen"
+              placeholder="Enter nitrogen value"
+              value={formData.nitrogen}
               className="w-full p-2 border border-gray-300 rounded"
               onChange={handleChange}
             />
           </div>
 
           <div>
-            <label className="block font-medium mb-1">💧 Humidity (%)</label>
+            <label className="block font-medium mb-1">🧪 Potassium</label>
             <input
               type="number"
-              step="0.1"
-              name="humidity"
-              placeholder="Enter humidity"
+              name="potassium"
+              placeholder="Enter potassium value"
+              value={formData.potassium}
               className="w-full p-2 border border-gray-300 rounded"
               onChange={handleChange}
             />
           </div>
 
           <div>
-            <label className="block font-medium mb-1">🌫️ Moisture (%)</label>
+            <label className="block font-medium mb-1">🧪 Phosphorous</label>
             <input
               type="number"
-              step="0.1"
-              name="moisture"
-              placeholder="Enter soil moisture"
+              name="phosphorous"
+              placeholder="Enter phosphorous value"
+              value={formData.phosphorous}
               className="w-full p-2 border border-gray-300 rounded"
               onChange={handleChange}
             />
@@ -129,24 +139,26 @@ const Fertilizer = () => {
             {isPending ? "Predicting..." : "Predict Fertilizer"}
           </button>
         </div>
+
         {data && (
           <div className="mt-6 p-4 bg-green-100 rounded">
             <h3 className="text-lg font-semibold mb-2">✅ Prediction Result</h3>
-            <p>🧪 Nitrogen: {data.nitrogen} kg/acre</p>
-            <p>🧪 Phosphorous: {data.phosphorous} kg/acre</p>
-            <p>🧪 Potassium: {data.potassium} kg/acre</p>
+
             <p className="mt-3 font-bold text-green-900">
-              🌿 Recommended Fertilizer: {data.fertilizer}
+              🌿 Recommended Fertilizer: {data.recommended_fertilizer}
             </p>
           </div>
         )}
+
+        {error && (
+          <div className="mt-8 p-5 bg-red-100 rounded shadow">
+            <h3 className="text-xl font-semibold mb-2 text-red-800">
+              ❌ Error
+            </h3>
+            <p>{error.message}</p>
+          </div>
+        )}
       </div>
-      {error && (
-        <div className="mt-8 p-5 bg-red-100 rounded shadow">
-          <h3 className="text-xl font-semibold mb-2 text-red-800">❌ Error</h3>
-          <p>{error.message}</p>
-        </div>
-      )}
     </Layout>
   );
 };
