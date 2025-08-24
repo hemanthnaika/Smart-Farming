@@ -4,6 +4,16 @@ import footer from "./footer.png";
 import ProductHero from "./ProductsHero.jpg";
 import LoginImage from "./Login.jpg";
 import UserProfile from "./profile.jpg";
-import Person from "./person.avif";
+import Person from "./person.jpg";
+import Contact from "./contact.jpg";
 
-export { logo, hero, footer, ProductHero, LoginImage, UserProfile, Person };
+export {
+  logo,
+  hero,
+  footer,
+  ProductHero,
+  LoginImage,
+  UserProfile,
+  Person,
+  Contact,
+};

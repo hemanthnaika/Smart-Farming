@@ -35,17 +35,6 @@ class User(db.Document):
             'min_length': 'Password must be at least 6 characters',
         }
     )
-
-    is_admin = db.BooleanField(default=False)
-    address = db.StringField()
-
-    phone_number = db.StringField(
-        regex=r'^\d{10}$',
-        error_messages={
-            'invalid': 'Please enter a valid 10-digit phone number'
-        }
-    )
-
     created_at = db.DateTimeField(default=datetime.utcnow)
     updated_at = db.DateTimeField(default=datetime.utcnow)
     meta = {

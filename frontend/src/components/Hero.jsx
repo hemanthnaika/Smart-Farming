@@ -65,16 +65,15 @@ const Hero = () => {
         </h1>
 
         <p className="mt-4 text-lg md:text-md font-paragraph text-center max-w-xl subtitle">
-          Sell your crops, detect plant diseases, and get fertilizer advice —
-          all in one place.
+          Sell your crops and detect plant diseases — all in one place.
         </p>
 
-        <Link
-          to="/"
+        <a
+          href="#features"
           className="bg-tertiary hover:bg-accent text-white py-3 px-10 rounded-md mt-8 transition duration-300 ease-in-out font-heading"
         >
           Get Started
-        </Link>
+        </a>
 
         {/* ✅ Scroll Button */}
         <button

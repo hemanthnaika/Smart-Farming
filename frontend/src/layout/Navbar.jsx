@@ -58,7 +58,7 @@ export default function Navbar() {
             <Link
               key={link.name}
               to={link.path}
-              className="nav-link relative font-heading tracking-widest text-md after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-tertiary after:transition-all after:duration-300 hover:after:w-full"
+              className="nav-link relative font-heading tracking-widest text-md after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-tertiary after:transition-all after:duration-300 hover:after:w-full  "
             >
               {link.name}
             </Link>
@@ -75,7 +75,7 @@ export default function Navbar() {
               className="w-8 h-8 rounded-full cursor-pointer"
             />
             {showDropdown && (
-              <div className="absolute right-0 mt-2 w-32 bg-white shadow-md rounded-md py-2 z-50">
+              <div className="absolute right-0 mt-2 w-32 bg-white shadow-md rounded-md py-2 z-50 text-md font-bold">
                 <Link
                   to="/user-dashboard"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

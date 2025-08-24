@@ -1,15 +1,9 @@
 import {
   Beans,
-  Browse,
   Dairy,
-  Diseases,
-  Fertilizer,
   Fruits,
   Grains,
-  Livestock,
-  Market,
   Others,
-  shop,
   Spices,
   Vegetables,
 } from "../assets/icons";
@@ -36,23 +30,18 @@ export const NavbarLinks = [
 export const Features = [
   {
     title: "Sell Product",
-    image: shop,
+    image: "https://agrisens.netlify.app/explore-now/assets/img/prod4.png",
     path: "/sell-product",
   },
   {
     title: "Browse Products",
-    image: Browse,
+    image: "https://agrisens.netlify.app/explore-now/assets/img/prod1.png",
     path: "/products",
   },
   {
     title: "Detect Diseases",
-    image: Diseases,
+    image: "https://agrisens.netlify.app/explore-now/assets/img/prod6.png",
     path: "/detect-disease",
-  },
-  {
-    title: "Fertilizer Guide",
-    image: Fertilizer,
-    path: "/fertilizer-guide",
   },
 ];
 

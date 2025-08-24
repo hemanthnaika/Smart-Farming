@@ -22,7 +22,6 @@ export default function ProductCard({ product }) {
           <p className="text-slate-600 text-lg md:text-xl">
             ₹ {product.price} / {product.unit}
           </p>
-        
         </div>
         <p className="text-slate-800 text-base font-medium my-1.5">
           {product.name}
@@ -32,16 +31,13 @@ export default function ProductCard({ product }) {
         </p>
         <p className="text-slate-500">Location: {product.location}</p>
 
-        <div className="grid grid-cols-2 gap-2 mt-3">
+        <div className="grid mt-3 ">
           <Link
             to={`/products/${product.id}`}
-            className="bg-slate-100 text-slate-600 py-2 rounded text-center"
+            className="bg-slate-100 text-slate-600 py-2 rounded text-center hover:bg-tertiary hover:text-white"
           >
             View
           </Link>
-          <button className="bg-slate-800 text-white py-2 rounded">
-            Contact
-          </button>
         </div>
       </div>
     </div>

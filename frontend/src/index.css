@@ -9,10 +9,14 @@
   --color-tertiary: #015f64;
 }
 
+*{
+   scroll-behavior: smooth;
+}
 body {
   background-color: var(--color-primary);
   overflow-x: hidden;
   font-family: var(--font-paragraph);
+ 
 }
 ::-webkit-scrollbar {
   width: 2px;

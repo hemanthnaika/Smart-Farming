@@ -2,49 +2,49 @@ import { Person } from "../assets/images";
 
 export default function About() {
   return (
-    <section className="flex flex-col md:flex-row items-center justify-center gap-10 max-md:px-4 mt-15 mb-5">
+    <section className="flex flex-col md:flex-row items-center justify-center gap-10 max-md:px-4 mt-20 mb-5">
       <div className="relative shadow-2xl shadow-indigo-600/40 rounded-2xl overflow-hidden shrink-0">
         <img
-          className="max-w-96 w-full object-cover rounded-2xl h-[550px]"
+          className="max-w-96 w-full  rounded-2xl h-[550px]"
           src={Person}
           alt="Person"
         />
       </div>
-      <div className="text-sm text-slate-600 max-w-lg">
+      <div className="text-sm text-slate-600 max-w-2xl">
         <h1 className="text-xl uppercase font-semibold text-slate-700">
           What we do?
         </h1>
         <div className="w-24 h-[3px] rounded-full bg-gradient-to-r from-indigo-600 to-[#DDD9FF]"></div>
-        <p className="mt-8">
-          Smart Farming is a digital platform that empowers farmers to monitor
-          crop health, detect diseases using AI, and improve yield through
-          data-driven decisions.
-        </p>
-        <p className="mt-4">
-          Our system provides personalized fertilizer recommendations based on
-          land type and crop variety, helping reduce waste and improve soil
-          health.
-        </p>
-        <p className="mt-4">
-          With features like image-based crop analysis and predictive insights,
-          we help farmers take timely actions to protect and grow their crops
-          effectively.
-        </p>
-        <button className="flex items-center gap-2 mt-8 hover:-translate-y-0.5 transition bg-gradient-to-r from-indigo-600 to-[#8A7DFF] py-3 px-8 rounded-full text-white">
-          <span>Read more</span>
-          <svg
-            width="13"
-            height="12"
-            viewBox="0 0 13 12"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12.53 6.53a.75.75 0 0 0 0-1.06L7.757.697a.75.75 0 1 0-1.06 1.06L10.939 6l-4.242 4.243a.75.75 0 0 0 1.06 1.06zM0 6v.75h12v-1.5H0z"
-              fill="#fff"
-            />
-          </svg>
-        </button>
+        <div className="text-lg text-justify">
+          <p className="mt-8">
+            <strong>Smart Farming Platform</strong> is an AI-powered web
+            application designed to support farmers in making better and smarter
+            agricultural decisions. The platform primarily focuses on{" "}
+            <strong>crop disease detection</strong> using deep learning
+            techniques, allowing farmers to simply upload leaf images for
+            accurate disease identification. Once a disease is detected, the
+            system suggests suitable <strong>remedies and solutions</strong> to
+            protect crops and prevent yield loss.
+          </p>
+          <p className="mt-4">
+            In addition to disease detection, the platform enables farmers to{" "}
+            <strong>manage their own products</strong> with features to{" "}
+            <strong>add, edit, and delete listings</strong>. Other farmers or
+            users can view these product listings, encouraging knowledge sharing
+            and collaboration within the farming community.
+          </p>
+          <p className="mt-4">
+            The platform is built with simplicity and accessibility in mind — it
+            has only <strong>users</strong> (no admin role) to keep interactions
+            straightforward and farmer-friendly.
+          </p>
+          <p className="mt-4">
+            Our mission is to <strong>empower farmers</strong> with AI-driven
+            tools that improve crop health, reduce losses, and enhance
+            productivity, creating a sustainable and efficient agricultural
+            ecosystem.
+          </p>
+        </div>
       </div>
     </section>
   );

@@ -56,7 +56,6 @@ def login_user():
             "message": "Login successful",
             "token": token,
             "user": {
-              
                 "email": user.email,
                 "name": user.name,
             }
